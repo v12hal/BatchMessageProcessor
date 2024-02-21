@@ -1,0 +1,38 @@
+spring:
+  cloud:
+    function:
+      definition: processMessage
+    stream:
+      bindings:
+        processMessage-in-0:
+          destination: employees-topic
+          group: local-consumer
+          consumer:
+            batch-mode: true
+          error-handler-definition: sendToDLQ
+
+        processMessage-out-0:
+          destination: employees-output-topic
+          group: local-consumer
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+        bindings:
+          processMessage-in-0:
+            consumer:
+              enable-dlq: true
+              dlq-name: employees-dlq
+              configuration:
+                key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                fetch.max.wait.ms: 5000
+                fetch.min.bytes: 10000000
+                max.poll.records: 10
+#                https://github.com/spring-cloud/spring-cloud-stream-samples/blob/main/batch-producer-consumer/src/main/resources/application.yml
+
+#              default:
+#                key:
+#                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                value:
+#                  serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
