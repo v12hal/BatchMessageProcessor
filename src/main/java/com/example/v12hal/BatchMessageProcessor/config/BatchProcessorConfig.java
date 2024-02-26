@@ -26,8 +26,8 @@ public class BatchProcessorConfig {
         return batchProcessorService::processMessage;
     }
 
-    @Bean
-    public Consumer<ErrorMessage> sendToDLQ() {
-        return batchProcessorService::sendToDLQ;
-    }
+//    @Bean
+//    public Consumer<ErrorMessage> sendToDLQ() {
+//        return batchProcessorService::sendToDLQ;
+//    }
 }

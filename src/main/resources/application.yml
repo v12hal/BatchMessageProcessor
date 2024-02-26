@@ -9,7 +9,7 @@ spring:
           group: local-consumer
           consumer:
             batch-mode: true
-          error-handler-definition: sendToDLQ
+#          error-handler-definition: sendToDLQ
 
         processMessage-out-0:
           destination: employees-output-topic
@@ -23,6 +23,10 @@ spring:
             consumer:
               enable-dlq: true
               dlq-name: employees-dlq
+              dlq-producer-properties:
+                configuration:
+                  key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                  value.serializer: org.apache.kafka.common.serialization.StringSerializer
               configuration:
                 key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
                 value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
