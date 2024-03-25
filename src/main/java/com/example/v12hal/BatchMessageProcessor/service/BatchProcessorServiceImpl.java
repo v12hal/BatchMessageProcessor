@@ -20,13 +20,14 @@ public class BatchProcessorServiceImpl implements BatchProcessor{
 
 
         System.out.println("Received: "+payload.getPayload());
-        int val = Integer.parseInt(payload.getPayload().get(0));
+//        int val = Integer.parseInt(payload.getPayload().get(0));
 //        System.out.println("kafka_receivedMessageKey: "+receivedMsgKeys);
 //        System.out.println("kafka_receivedPartitionId: "+partitionIds);
 //        System.out.println("kafka_offset: "+offsets);
 
         List<String> receivedBatch = payload.getPayload();
         List<Message<String>> outputBatch = new ArrayList<>();
+        List<Message<String>> emptyList = new ArrayList<>();
         for (String p : receivedBatch) {
             outputBatch.add(MessageBuilder.withPayload(p + ":1").build());
             outputBatch.add(MessageBuilder.withPayload(p + ":2").build());
@@ -34,7 +35,7 @@ public class BatchProcessorServiceImpl implements BatchProcessor{
             outputBatch.add(MessageBuilder.withPayload(p + ":4").build());
         }
         System.out.println("Received: "+outputBatch);
-        return outputBatch;
+        return !outputBatch.isEmpty() ? outputBatch : null;
     }
 
     public void sendToDLQ(ErrorMessage errorMessage) {
